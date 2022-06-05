@@ -3,7 +3,7 @@
 	import Slider from '../components/slider/Slider.svelte';
 	import Play from '../components/controls/Play.svelte';
 	import Pause from '../components/controls/Pause.svelte';
-	import Stop from '../components/controls/Stop.svelte';
+	import { fly } from 'svelte/transition';
 
 	let bpm = 120;
 	let audio = null;
@@ -38,15 +38,15 @@
 				hasStarted = true;
 				date = new Date().getTime();
 				audio.play();
-				circle.classList.toggle('move');
+				circle?.classList.toggle('move');
 			} else {
 				// check for next iteration
 				const now = new Date().getTime();
 				const target = Math.floor(60000 / bpm);
 
 				if (now - date >= Math.floor(target)) {
-					console.log('is:', now - date, 'should be:', target);
-					circle.classList.toggle('move');
+					// console.log('is:', now - date, 'should be:', target);
+					circle?.classList.toggle('move');
 					date = new Date().getTime();
 					// clone node so it can be played
 					// before the previous iteration has finished
@@ -82,15 +82,28 @@
 	}
 </script>
 
-<div class="p-3 bg-gray-700 text-white rounded-3xl mx-auto shadow-xl w-full md:w-1/2">
-	<div class="circle-container bg-zinc-800 rounded-full  mx-auto h-5 block relative w-1/2">
-		<div class="circle" bind:this={circle} />
+<div
+	class="p-6 metronome relative border-8 border-black/30 bg-neutral-800 text-white rounded-3xl mx-auto w-full md:w-1/2"
+>
+	{#if hasStarted}
+		<div
+			transition:fly={{ y: -10, duration: 100 }}
+			class="circle-container absolute top-6 left-1/2 transform -translate-x-1/2 bg-zinc-900/30 rounded-full  mx-auto h-5 block w-1/2 mb-4"
+		>
+			<div class="circle" bind:this={circle} />
+		</div>
+	{/if}
+	<div
+		class="mb-4 mt-4 bg-black/30 absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 w-full p-6"
+	>
+		<Slider on:slide={(e) => handleSlide(e.detail)} value={bpm} />
 	</div>
-	<Slider on:slide={(e) => handleSlide(e.detail)} value={bpm} />
-	<div class="flex gap-3 my-3 justify-center items-center">
-		<Play {hasStarted} on:play={handlePlay} />
-		<Pause on:pause={handlePause} />
-		<Stop on:stop={handleStop} />
+	<div class="flex absolute bottom-6 left-0 p-6 w-full gap-3 my-3 justify-center items-center">
+		{#if hasStarted}
+			<Pause on:pause={handlePause} />
+		{:else}
+			<Play {hasStarted} on:play={handlePlay} />
+		{/if}
 	</div>
 </div>
 
@@ -109,5 +122,14 @@
 	}
 	:global(.circle.move) {
 		left: calc(100% - 20px);
+	}
+
+	.metronome {
+		width: 350px;
+		height: 70vh;
+		max-height: 600px;
+		border-radius: 50px;
+		background: #383838;
+		box-shadow: 20px 20px 60px #303030, -20px -20px 60px #404040;
 	}
 </style>

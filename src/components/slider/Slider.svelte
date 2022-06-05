@@ -9,10 +9,13 @@
 	}
 </script>
 
-<p class="text-6xl font-extrabold tracking-tighter italic">{value}</p>
-<div class="slider-container">
+<p class="text-6xl font-extrabold tracking-tighter italic">
+	{value} <span class="text-4xl">BPM</span>
+</p>
+<div class="slider-container mt-4">
 	<input
-		class="w-full h-6 p-0 bg-white focus:outline-none focus:ring-0 focus:shadow-none"
+		class="form-range
+		appearance-none w-full h-3 rounded-full p-0 bg-zinc-900 focus:outline-none focus:ring-0 focus:shadow-none"
 		type="range"
 		min="1"
 		max="300"
@@ -20,3 +23,13 @@
 		on:input={handleSlide}
 	/>
 </div>
+
+<style>
+	input[type='range']::-webkit-slider-thumb {
+		appearance: none;
+		width: 26px;
+		height: 26px;
+		border-radius: 50%;
+		background: rgb(234 179 8) !important;
+	}
+</style>

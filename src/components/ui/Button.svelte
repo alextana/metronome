@@ -9,8 +9,10 @@
 <button
 	on:click
 	class="{extraClass} {hoverClass} {activeClass} {isActive
-		? 'bg-blue-400  hover:bg-blue-500'
-		: ''} hover:bg-gray-200 rounded-lg {svg ? 'pl-8' : 'pl-4'} pr-4 py-2 bg-white text-black"
+		? ' block hover:bg-blue-500'
+		: ''} hover:bg-gray-200 rounded-lg {svg
+		? 'pl-8'
+		: 'pl-4'} w-full text-center flex justify-center pr-4 py-2 bg-yellow-500 hover:bg-yellow-600 text-black"
 >
 	<slot />
 </button>
